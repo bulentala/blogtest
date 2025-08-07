@@ -41,36 +41,24 @@ async function getPostsByTag(tag: string) {
   return posts.filter(Boolean);
 }
 
-export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {
-  const { tag } = await params;
-  const posts = await getPostsByTag(tag);
+import { getArticlesByTag } from '../../lib/articles';
+import ArticleList from '../../components/ArticleList';
+
+interface TagPageProps {
+  params: {
+    tag: string;
+  };
+}
+
+export default function TagPage({ params }: TagPageProps) {
+  const { tag } = params;
+  const articles = getArticlesByTag(tag);
 
   return (
-    <div className="test mx-auto grid min-h-screen max-w-2xl grid-rows-[auto_1fr_auto]">
-      <div className="test grid grid-cols-[auto_1fr_auto]">
-        <div className="test col-start-1"></div>
-        <div className="test col-start-3"></div>
-      </div>
-      <div className="test">
-        <h1>Posts tagged with "{tag}"</h1>
-        <ul>
-          {posts.map((post) => (
-            <li key={post.slug}>
-              <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-              <p>Created at: {post.createdAt}</p>
-              <p>
-                Tags:{" "}
-                {post.tags.map((t: string) => (
-                  <Link key={t} href={`/tags/${t}`}>
-                    {t}
-                  </Link>
-                ))}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="test"></div>
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Articles tagged with "{tag}"</h1>
+      <ArticleList articles={articles} />
     </div>
   );
 }
+
