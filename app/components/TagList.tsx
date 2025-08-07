@@ -1,5 +1,4 @@
-
-import Link from 'next/link';
+import Link from "next/link";
 
 interface TagListProps {
   tags: string[];
@@ -7,12 +6,15 @@ interface TagListProps {
 
 const TagList: React.FC<TagListProps> = ({ tags }) => {
   return (
-    <div className="p-4 bg-gray-100 rounded-lg">
-      <h2 className="text-xl font-bold mb-4">Tags</h2>
-      <ul className="space-y-2">
+    <div className="test bg-gray-100">
+      <h2 className="mb-4 text-xl font-bold">Tags</h2>
+      <ul className="flex flex-row flex-wrap space-x-2">
         {tags.map((tag) => (
           <li key={tag}>
-            <Link href={`/tags/${tag}`} className="text-blue-500 hover:underline">
+            <Link
+              href={`/tags/${tag}`}
+              className="text-blue-500 hover:underline"
+            >
               {tag}
             </Link>
           </li>
