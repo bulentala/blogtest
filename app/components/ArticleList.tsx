@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { Article } from '../lib/articles';
+import Link from "next/link";
+import { Article } from "../lib/articles";
 
 interface ArticleListProps {
   articles: Article[];
@@ -7,7 +7,7 @@ interface ArticleListProps {
 
 export default function ArticleList({ articles }: ArticleListProps) {
   return (
-    <div>
+    <div className="test">
       <h1>Blog Posts</h1>
       <ul>
         {articles.map((article) => (

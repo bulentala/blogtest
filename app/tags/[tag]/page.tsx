@@ -1,8 +1,8 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import { compileMDX } from 'next-mdx-remote/rsc';
-import { z } from 'zod';
-import Link from 'next/link';
+import { promises as fs } from "fs";
+import path from "path";
+import { compileMDX } from "next-mdx-remote/rsc";
+import { z } from "zod";
+import Link from "next/link";
 
 const FrontmatterSchema = z.object({
   id: z.string(),
@@ -13,13 +13,13 @@ const FrontmatterSchema = z.object({
 });
 
 async function getPostsByTag(tag: string) {
-  const contentDirectory = path.join(process.cwd(), 'content');
+  const contentDirectory = path.join(process.cwd(), "content");
   const filenames = await fs.readdir(contentDirectory);
 
   const posts = await Promise.all(
     filenames.map(async (filename) => {
       const filePath = path.join(contentDirectory, filename);
-      const fileContents = await fs.readFile(filePath, 'utf8');
+      const fileContents = await fs.readFile(filePath, "utf8");
       const { frontmatter } = await compileMDX({
         source: fileContents,
         options: { parseFrontmatter: true },
@@ -29,20 +29,20 @@ async function getPostsByTag(tag: string) {
 
       if (parsedFrontmatter.tags.includes(tag)) {
         return {
-          slug: filename.replace('.mdx', ''),
+          slug: filename.replace(".mdx", ""),
           ...parsedFrontmatter,
         };
       }
 
       return null;
-    })
+    }),
   );
 
   return posts.filter(Boolean);
 }
 
-import { getArticlesByTag } from '../../lib/articles';
-import ArticleList from '../../components/ArticleList';
+import { getArticlesByTag } from "../../lib/articles";
+import ArticleList from "../../components/ArticleList";
 
 interface TagPageProps {
   params: {
@@ -50,15 +50,15 @@ interface TagPageProps {
   };
 }
 
-export default function TagPage({ params }: TagPageProps) {
+export default async function TagPage(props: TagPageProps) {
+  const params = await props.params;
   const { tag } = params;
-  const articles = getArticlesByTag(tag);
+  const articles = await getArticlesByTag(tag);
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Articles tagged with "{tag}"</h1>
+    <div className="test">
+      <h1 className="mb-4 text-2xl font-bold">Articles tagged with "{tag}"</h1>
       <ArticleList articles={articles} />
     </div>
   );
 }
-
