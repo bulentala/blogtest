@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.test {
+  @apply border border-red-500 p-4
+}
