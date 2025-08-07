@@ -12,10 +12,16 @@ export interface Article {
   updatedAt: string;
 }
 
+let cachedArticles: Article[] | null = null;
+
 export function getAllArticles(): Article[] {
+  if (cachedArticles) {
+    return cachedArticles;
+  }
+
   const fileNames = fs.readdirSync(contentDirectory);
 
-  return fileNames
+  const articles = fileNames
     .filter((fileName) => fileName.endsWith('.mdx'))
     .map((fileName) => {
       const filePath = path.join(contentDirectory, fileName);
@@ -30,6 +36,9 @@ export function getAllArticles(): Article[] {
         updatedAt: data.updatedAt,
       };
     });
+
+  cachedArticles = articles;
+  return articles;
 }
 
 export function getArticlesByTag(tag: string): Article[] {

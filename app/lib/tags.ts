@@ -4,7 +4,13 @@ import matter from 'gray-matter';
 
 const contentDirectory = path.join(process.cwd(), 'content');
 
+let cachedTags: string[] | null = null;
+
 export function getAllTags() {
+  if (cachedTags) {
+    return cachedTags;
+  }
+
   const allTags = new Set<string>();
   const fileNames = fs.readdirSync(contentDirectory);
 
@@ -22,5 +28,6 @@ export function getAllTags() {
     }
   });
 
-  return Array.from(allTags);
+  cachedTags = Array.from(allTags);
+  return cachedTags;
 }
